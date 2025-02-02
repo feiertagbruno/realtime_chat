@@ -1,0 +1,51 @@
+O que eu aprendi hoje sobre htmx:
+
+Primeiro:
+  htmx é um substituto (eu acho) para o ajax, ele dá um jeito de (pelo python) 
+  receber só uma parte de uma resposta e não precisar carregar a página inteira
+
+Segundo:
+  - tem que instalar o django-htmx (pip install django-htmx)
+  - colocar o "django_htmx" em INSTALLED_APPS
+  - adicionar "django_htmx.middleware.HtmxMiddleware" ao MIDDLEWARE
+  - baixar a versão mais recente do htmx.min.js (ou sem min) nessa url :
+    https://unpkg.com/browse/htmx.org@1.9.12/dist/
+    e colocar na pasta static e adicionar ao head para que a aplicação tenha acesso, exemplo
+    <script src="{% static "a_rtchat/js/htmx.js" %}"></script>
+  
+Terceiro (vou parar de contar no próximo)
+  - em um elemento colocar os atributos:
+    hx-post="{% url "home" %}" ou (hx-get)
+    hx-target="#chat_messages" (id do elemento que vai receber o retorno desta solicitação)
+    hx-swap="beforeend" 
+        outras opções do swap:
+          hx-swap="innerHTML" -> Substitui o conteúdo interno do elemento alvo.
+          hx-swap="outerHTML" -> Substitui o próprio elemento alvo, não apenas seu conteúdo.
+            nesses dois casos tem que enviar a string html feita tipo isso: return HttpResponse("<p>Conteúdo carregado via HTMX!</p>")
+          hx-swap="beforebegin" -> Insere o novo conteúdo antes do elemento alvo. (acho que fora dele, antes)
+          hx-swap="afterbegin" -> Insere o novo conteúdo dentro do elemento alvo, antes do conteúdo existente.
+          hx-swap="beforeend" -> Insere o novo conteúdo dentro do elemento alvo, após o conteúdo existente.
+          hx-swap="afterend" -> Insere o novo conteúdo depois do elemento alvo.
+          hx-swap="delete" -> Remove o elemento alvo da página.
+          hx-swap="none" -> Evita que o conteúdo da resposta seja inserido automaticamente (útil para eventos personalizados).
+
+    hx-trigger= chatgpt deu exemplo desse atributo no button como "click", no form que tem neste projeto não tem esse atributo, 
+          imagino que o padrão ja seja "submit"
+    hx-indicator="#progresso" -> id do elemento que vai mostrar o progresso
+
+
+FALANDO EM EVENTOS PERSONALIZADOS
+  - eventos mais utilizados para capturar o retorno da requisição via htmx:
+    document.addEventListener(*, (e) => {corpo_da_funcao})
+      * "htmx:beforeRequest" -> A requisição está prestes a ser enviada.
+      * "htmx:beforeSend" -> Modificando a requisição antes de enviá-la
+          corpo_da_funcao = e.detail.headers["X-Custom-Header"] = "ValorPersonalizado"; // exemplo
+      * "htmx:afterRequest" -> retorno da requisição (este parece que vou usar bastante)
+          e.detail.xhr.responseText (pode retornar JsonResponse -> let dados = JSON.parse(resposta) )
+      * "htmx:load" -> Conteúdo carregado e exibido no alvo!
+      * "htmx:swap" -> Conteúdo foi trocado no elemento!
+      * "htmx:afterSwap" -> O swap foi concluído.
+      * "htmx:responseError" -> Erro na resposta da requisição.
+      * "htmx:abort" -> Quando a requisição é abortada, por qualquer razão
+      * "htmx:progress" -> console.log("Progresso da requisição:", e.detail.progress);
+      * "htmx:error" -> Quando há um erro na requisição.

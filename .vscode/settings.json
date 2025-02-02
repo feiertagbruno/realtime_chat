@@ -19,7 +19,7 @@
 	},
 	"[django-html]": {
 	  "editor.formatOnSave": false,
-	  "editor.defaultFormatter": "vscode.html-language-features",
+	  "editor.defaultFormatter": "esbenp.prettier-vscode",
 	  "editor.quickSuggestions": {
 		"other": true,
 		"comments": true,
@@ -36,16 +36,16 @@
 	},
 	"files.associations": {
 		"*.py": "python",
-	  "*.js": "javascript",
-	  "*.jsx": "javascriptreact",
-	  "*.xml": "html",
-	  "*.svg": "html",
-	  "*.html": "html",
-	  "django-html": "html", // batisteo.vscode-django
-	  "**/*.html": "html",
-	  "**/templates/**/*.html": "django-html",
-	  "**/base_templates/**/*.html": "django-html",
-	  "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+		"*.js": "javascript",
+		"*.jsx": "javascriptreact",
+		"*.xml": "html",
+		"*.svg": "html",
+		"*.html": "django-html",
+		"django-html": "html",
+		"**/*.html": "html",
+		"**/templates/**/*.html": "django-html",
+		"**/base_templates/**/*.html": "django-html",
+		"**/requirements{/**,*}.{txt,in}": "pip-requirements"
 	},
 	"emmet.includeLanguages": {
 	  "django-html": "html", // batisteo.vscode-django
